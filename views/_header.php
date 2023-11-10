@@ -27,8 +27,15 @@
 									Welcome <?php echo $baseFunctions->username; ?>
 								</a>
 								<ul class="dropdown-menu" aria-labelledby="navbarDropdownMyAccount">
+
+									<?php if ($baseFunctions->admin_status): ?>
+										<li><a class="dropdown-item bg-info" href="/admin.php">Admin</a></li>
+										<li><hr class="dropdown-divider"></li>
+									<?php endif ?>
+
 									<li><a class="dropdown-item" href="<?php echo $baseFunctions->buildUrl(array('view'=>"b_acc_general")); ?>"><?php echo $baseFunctions->translate['b_acc_general']['link_label'][$baseFunctions->lang]; ?></a></li>
 									<li><a class="dropdown-item" href="<?php echo $baseFunctions->buildUrl(array('view'=>"b_acc_security")); ?>"><?php echo $baseFunctions->translate['b_acc_security']['link_label'][$baseFunctions->lang]; ?></a></li>
+
 									<li><hr class="dropdown-divider"></li>
 									<li><a class="dropdown-item" href="<?php echo $baseFunctions->buildUrl(array('view'=>"b_acc_logout")); ?>"><?php echo $baseFunctions->translate['b_acc_logout']['link_label'][$baseFunctions->lang]; ?></a></li>
 								</ul>

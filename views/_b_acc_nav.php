@@ -1,6 +1,15 @@
 <div class="side-nav col-lg-2">
 	<ul class="nav flex-column">
 
+		<?php if ($baseFunctions->admin_status): ?>
+			<li class="nav-item">
+				<a class="nav-link bg-info" href="/admin.php">Admin</a>
+			</li>
+			<li class="nav-item">
+				<hr class="divider">
+			</li>
+		<?php endif ?>
+
 		<li class="nav-item">
 			<a class="nav-link <?php echo ($baseFunctions->view=='b_acc_general')?'active':''; ?>" href="<?php echo $baseFunctions->buildUrl(array('view'=>"b_acc_general")); ?>"><?php echo $baseFunctions->translate['b_acc_general']['link_label'][$baseFunctions->lang]; ?></a>
 		</li>

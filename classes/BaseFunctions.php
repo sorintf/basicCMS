@@ -2,11 +2,11 @@
 class BaseFunctions
 {
     public $version = "f1f";
-    private $db_connection = NULL;
+    protected $db_connection = NULL;
 
     public $ID = NULL;
     public $username = "";
-    private $password = "";
+    protected $password = "";
     public $token_rememberme = "";
     public $admin_status = NULL;
     public $firstname_user = "";
@@ -20,7 +20,7 @@ class BaseFunctions
     public $acc_nl_time = "";
     public $delete_time = "";
 
-    private $errflag = false;
+    protected $errflag = false;
 
     public $user_is_logged_in = false;
     public $redirect = "";
@@ -548,7 +548,7 @@ class BaseFunctions
         session_destroy();
         $this->user_is_logged_in = false;
     }
-    private function deleteRememberMeCookie() {
+    protected function deleteRememberMeCookie() {
         list($ID, $token, $hash) = explode('_', $_COOKIE['rememberme']);
         if ($this->databaseConnection()&&!empty($ID)) {
             $q = $this->db_connection->prepare("
@@ -569,7 +569,7 @@ class BaseFunctions
         }
         return false;
     }
-    private function newRememberMeCookie() {
+    protected function newRememberMeCookie() {
         $random_token_string = hash('sha256', mt_rand());
         $cookie_string_first_part = $this->ID.'_'.$random_token_string;
         $cookie_string_hash = hash('sha256', $cookie_string_first_part.COOKIE_SECRET_KEY);
@@ -595,7 +595,7 @@ class BaseFunctions
         }
         return false;
     }
-    private function generateTokenValidareEmail() {
+    protected function generateTokenValidareEmail() {
         $token_validare_email = sha1(uniqid(mt_rand(), true));
         $checkToken = $this->getUserByTokenValidareEmail($token_validare_email);
         if (isset($checkToken->ID)) {
@@ -604,7 +604,7 @@ class BaseFunctions
 
         return $token_validare_email;
     }
-    private function generateTokenResetPassword() {
+    protected function generateTokenResetPassword() {
         $token_resetare_parola = sha1(uniqid(mt_rand(), true));
         $checkToken = $this->getUserByTokenResetareParola($token_resetare_parola);
         if (isset($checkToken->ID)) {
@@ -622,7 +622,7 @@ class BaseFunctions
 
 
 
-    private function setValues( $user ) {
+    protected function setValues( $user ) {
 
         if ( isset($user->ID) ) {
 
@@ -656,12 +656,12 @@ class BaseFunctions
             }
         }
     }
-    private function refreshUser() {
+    protected function refreshUser() {
         $refresh = $this->getUserById($this->ID);
         $this->setValues($refresh);
         return true;
     }
-    private function loginWithCookieData() {
+    protected function loginWithCookieData() {
         list($ID, $token, $hash) = explode('_', $_COOKIE['rememberme']);
         if ($hash == hash('sha256', $ID.'_'.$token.COOKIE_SECRET_KEY) && !empty($token)) {
             $user = $this->getUserByTokenRememberme($ID, $token);
@@ -677,7 +677,7 @@ class BaseFunctions
         $this->deleteRememberMeCookie();
         return false;
     }
-    private function loginWithSessionData() {
+    protected function loginWithSessionData() {
         $id_user = $_SESSION['id_user'];
         $user = $this->getUserById($id_user);
 
@@ -688,7 +688,7 @@ class BaseFunctions
             $this->doLogout();
         }
     }
-    private function loginWithPostData( $params=array() ) {
+    protected function loginWithPostData( $params=array() ) {
 
         $username = isset($params['username'])?$params['username']:"";
         $password = isset($params['password'])?$params['password']:"";
@@ -747,7 +747,7 @@ class BaseFunctions
 
 
 
-    private function getUserById( $id_user ) {
+    protected function getUserById( $id_user ) {
         if ($this->databaseConnection()) {
             $q = $this->db_connection->prepare("
                 SELECT 
@@ -769,7 +769,7 @@ class BaseFunctions
         }
         return false;
     }
-    private function getUserByUsername( $username ) {
+    protected function getUserByUsername( $username ) {
         if ($this->databaseConnection()) {
             $q = $this->db_connection->prepare("
                 SELECT 
@@ -791,7 +791,7 @@ class BaseFunctions
         }
         return false;
     }
-    private function getUserByEmail( $email ) {
+    protected function getUserByEmail( $email ) {
         if ($this->databaseConnection()) {
             $q = $this->db_connection->prepare("
                 SELECT 
@@ -813,7 +813,7 @@ class BaseFunctions
         }
         return false;
     }
-    private function getUserByTel( $tel ) {
+    protected function getUserByTel( $tel ) {
         if ($this->databaseConnection()) {
             $q = $this->db_connection->prepare("
                 SELECT 
@@ -835,7 +835,7 @@ class BaseFunctions
         }
         return false;
     }
-    private function getUserByTokenValidareEmail( $token_validare_email ) {
+    protected function getUserByTokenValidareEmail( $token_validare_email ) {
         if ($this->databaseConnection()) {
             $q = $this->db_connection->prepare("
                 SELECT 
@@ -857,7 +857,7 @@ class BaseFunctions
         }
         return false;
     }
-    private function getUserByTokenResetareParola( $token_resetare_parola ) {
+    protected function getUserByTokenResetareParola( $token_resetare_parola ) {
         if ($this->databaseConnection()) {
             $q = $this->db_connection->prepare("
                 SELECT 
@@ -880,7 +880,7 @@ class BaseFunctions
         }
         return false;
     }
-    private function getUserByTokenRememberme( $id_user, $token_rememberme ) {
+    protected function getUserByTokenRememberme( $id_user, $token_rememberme ) {
         if ($this->databaseConnection()) {
             $q = $this->db_connection->prepare("
                 SELECT 
@@ -913,7 +913,7 @@ class BaseFunctions
 
 
 
-    private function registerUser( $params ) {
+    protected function registerUser( $params ) {
 
         $username = isset($params['username'])?$params['username']:"";
         $password = isset($params['password'])?$params['password']:"";
@@ -1088,7 +1088,7 @@ class BaseFunctions
         }
         return false;
     }
-    private function registerSendConfirmationEmail( $userObj ) {
+    protected function registerSendConfirmationEmail( $userObj ) {
         $link_activare_cont = BASE_URL.$this->buildUrl(array('view'=>'b_acc_register_confirm', 'tve'=>$userObj->token_validare_email));
         $email = $userObj->email_user;
         $subject = "PLATFORM_NAME: "."Confirmare adresa email";
@@ -1111,7 +1111,7 @@ class BaseFunctions
 
         return $server_output->success;
     }
-    private function registerConfirmUser( $token_validare_email ) {
+    protected function registerConfirmUser( $token_validare_email ) {
 
         // user can be logged in without email confirmed (from older version)
 
@@ -1186,7 +1186,7 @@ class BaseFunctions
     }
 
     // Admin function
-    private function registerConfirmUserAdminWrap( $token_validare_email ) {
+    protected function registerConfirmUserAdminWrap( $token_validare_email ) {
 
         // user can be logged in without email confirmed (from older version)
 
@@ -1213,7 +1213,7 @@ class BaseFunctions
 
         return false;
     }
-    private function registerConfirmUserAdmin( $userObj ) {
+    protected function registerConfirmUserAdmin( $userObj ) {
 
         if ($this->databaseConnection()) {
             $q = $this->db_connection->prepare("
@@ -1243,7 +1243,7 @@ class BaseFunctions
         return false;
     }
     // Admin function
-    private function registerSendAccountActivatedEmail( $userObj ) {
+    protected function registerSendAccountActivatedEmail( $userObj ) {
 
         $link_activare_cont = BASE_URL.$this->buildUrl(array('view'=>'b_acc_login'));
         $email = $userObj->email_user;
@@ -1273,7 +1273,7 @@ class BaseFunctions
 
 
 
-    private function accSendNewSubscribeValueToMj( $userObj, $acc_nl ) {
+    protected function accSendNewSubscribeValueToMj( $userObj, $acc_nl ) {
         if ($acc_nl=="da") {
             $action = "addforce";
         }else{
@@ -1295,7 +1295,7 @@ class BaseFunctions
 
         return $server_output->success;
     }
-    private function accEditPassword( $params ) {
+    protected function accEditPassword( $params ) {
 
         $password_old = isset($params['password_old'])?$params['password_old']:"";
         $password_new = isset($params['password_new'])?$params['password_new']:"";
@@ -1330,7 +1330,7 @@ class BaseFunctions
         }
         return false;
     }
-    private function accEditTokenValidareEmail( $id_user, $token_validare_email ) {
+    protected function accEditTokenValidareEmail( $id_user, $token_validare_email ) {
         if ($this->databaseConnection()) {
             $q = $this->db_connection->prepare("
                 UPDATE `users` 
@@ -1350,7 +1350,7 @@ class BaseFunctions
         }
         return false;
     }
-    private function accSendResetLinkEmail( $params ) {
+    protected function accSendResetLinkEmail( $params ) {
 
         $email = isset($params['email'])?$params['email']:"";
         $userObj = $this->getUserByEmail($email);
@@ -1391,7 +1391,7 @@ class BaseFunctions
         }
         return false;
     }
-    private function accEditTokenResetareParola( $id_user, $token_resetare_parola ) {
+    protected function accEditTokenResetareParola( $id_user, $token_resetare_parola ) {
         if ($this->databaseConnection()) {
             $q = $this->db_connection->prepare("
                 UPDATE `users` 
@@ -1412,7 +1412,7 @@ class BaseFunctions
         }
         return false;
     }
-    private function accResetPassword( $params ) {
+    protected function accResetPassword( $params ) {
 
         $password_new = isset($params['password_new'])?$params['password_new']:"";
         $password_repeat = isset($params['password_repeat'])?$params['password_repeat']:"";
@@ -1468,7 +1468,7 @@ class BaseFunctions
         }
         return false;
     }
-    private function accEditSettings( $params ) {
+    protected function accEditSettings( $params ) {
 
         $firstname = isset($params['firstname'])?$params['firstname']:'';
         $lastname = isset($params['lastname'])?$params['lastname']:'';
@@ -1547,7 +1547,7 @@ class BaseFunctions
         }
         return false;
     }
-    private function accEditNewsletterSubscribe( $params ) {
+    protected function accEditNewsletterSubscribe( $params ) {
 
         $acc_nl = isset($params['acc_nl'])?$params['acc_nl']:'nu';
         $acc_nl = ($acc_nl=="da")?$acc_nl:"nu";
@@ -1588,7 +1588,7 @@ class BaseFunctions
         }
         return false;
     }
-    private function accDeleteFirstStep( $id_user ) {
+    protected function accDeleteFirstStep( $id_user ) {
 
         $oldValues = $this->getUserById($id_user);
 
@@ -1632,7 +1632,7 @@ class BaseFunctions
         }
         return false;
     }
-    private function accDeleteFinalStep( $id_user ) {
+    protected function accDeleteFinalStep( $id_user ) {
 
         $oldValues = $this->getUserById($id_user);
 
@@ -1673,7 +1673,7 @@ class BaseFunctions
         }
         return false;
     }
-    private function accSendRecoveryLinkEmail( $params ) {
+    protected function accSendRecoveryLinkEmail( $params ) {
 
         $email = isset($params['email'])?$params['email']:"";
         $userObj = $this->getUserByEmail($email);
@@ -1714,7 +1714,7 @@ class BaseFunctions
         }
         return false;
     }
-    private function accRecoveryConfirm( $token_validare_email ) {
+    protected function accRecoveryConfirm( $token_validare_email ) {
 
         // user can be logged in without email confirmed (from older version)
 
@@ -1785,7 +1785,7 @@ class BaseFunctions
         }
         return $text;
     }
-    private function f404Register( $id_user, $sursa, $slug ) {
+    protected function f404Register( $id_user, $sursa, $slug ) {
         if ( $this->databaseConnection()) {
             $q = $this->db_connection->prepare("
                 INSERT INTO `hlp_404` 
@@ -1838,7 +1838,7 @@ class BaseFunctions
 
 
 
-    private function deleteDirectory( $dir ) {
+    protected function deleteDirectory( $dir ) {
         // checks if file or dir exists
         if (!file_exists($dir)) {
             return true;
@@ -1863,7 +1863,7 @@ class BaseFunctions
         }
         return rmdir($dir);
     }
-    private function listDirectoryFiles( $dir ) {
+    protected function listDirectoryFiles( $dir ) {
         $list = array();
         if (is_dir($dir)) {
             foreach (scandir($dir) as $item) {
@@ -1885,7 +1885,7 @@ class BaseFunctions
 
 
 
-    private function buildPager( $view, $nr_of_pages, $params ) {
+    protected function buildPager( $view, $nr_of_pages, $params ) {
         
         $nr_of_buttons = isset($params['nr_of_buttons'])?$params['nr_of_buttons']:5;
         $current_page = $this->page;
@@ -1968,7 +1968,7 @@ class BaseFunctions
         }
         return $pager;
     }
-    private function buildPagerAsTabs( $view, $nr_of_pages, $params ) {
+    protected function buildPagerAsTabs( $view, $nr_of_pages, $params ) {
         
         $nr_of_buttons = isset($params['nr_of_buttons'])?$params['nr_of_buttons']:5;
         $current_page = $this->page;
@@ -2408,7 +2408,7 @@ class BaseFunctions
 
 
 
-    private function newsletterAdaugaInscriereAjax( $params ) {
+    protected function newsletterAdaugaInscriereAjax( $params ) {
         $lastname = isset($params['lastname'])?$params['lastname']:'';
         $email = isset($params['email'])?$params['email']:'';
         $sursa = isset($params['sursa'])?$params['sursa']:'';
@@ -2434,7 +2434,7 @@ class BaseFunctions
 
         return false;
     }
-    private function newsletterAdaugaInscriere( $params ) {
+    protected function newsletterAdaugaInscriere( $params ) {
         $lastname = isset($params['lastname'])?$params['lastname']:'';
         $email = isset($params['email'])?$params['email']:'';
         $sursa = isset($params['sursa'])?$params['sursa']:'';
@@ -2471,7 +2471,7 @@ class BaseFunctions
 
         return false;
     }
-    private function setAdminLog( $tabel_modificat, $id_modificat, $descriere ) {
+    protected function setAdminLog( $tabel_modificat, $id_modificat, $descriere ) {
 
         if ( $this->databaseConnection() ) {
             $q = $this->db_connection->prepare("
@@ -2509,7 +2509,7 @@ class BaseFunctions
         }
         return false;
     }
-    private function databaseConnection(){
+    protected function databaseConnection(){
         if ($this->db_connection != null) {
             return true;
         } else {
