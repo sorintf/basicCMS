@@ -2,11 +2,18 @@
 class AdminFunctions extends BaseFunctions
 {
 
-    public $version = "a1q";
+    public $version = "a1e";
     public $view = "a_index";
 
     public function __construct(){
+        if (isset($_GET['view'])) {
+            $this->view = trim(htmlspecialchars($_GET['view']));
+        }
+
+
+
         $this->rep['users']['nr']['total'] = $this->usersGetNrByStatus("all");
+        $this->rep['users']['nr']['approved'] = $this->usersGetNrByStatus('3');
         $this->rep['users']['nr']['pending_approval'] = $this->usersGetNrByStatus('2');
         $this->rep['users']['nr']['pending_confirmation'] = $this->usersGetNrByStatus('1');
         $this->rep['users']['nr']['blocked'] = $this->usersGetNrByStatus('0');
@@ -114,9 +121,14 @@ class AdminFunctions extends BaseFunctions
             $this->page_description = "Atinge întregul potențial al organzației tale";
         }elseif ($this->view=="a_users_list") {
 
-            $this->pageSel2 = true;
-            $this->page_title = "ORA - Despre";
-            $this->page_description = "Ajutăm organizația ta să prospere într-un mediu de afaceri dinamic";
+            $this->dataTable = true;
+
+            if (isset($_GET['status'])) {
+                $status = trim(htmlspecialchars($_GET['status']));
+            }else{
+                $status = "all";
+            }
+            $this->rep['users_list'] = $this->usersGetByStatus($status);
         }
     }
 
@@ -148,6 +160,35 @@ class AdminFunctions extends BaseFunctions
             $r = $q->fetchObject();
             $q = null;
             return $r->nr;
+        }
+        return false;
+    }
+    protected function usersGetByStatus( $status="all" ) {
+        if ($status=="all") {
+            $where = "1";
+        }else{
+            $where = "u.`status`=:status";
+        }
+        if ($this->databaseConnection()) {
+            $q = $this->db_connection->prepare("
+                SELECT 
+                    u.*, 
+                    AES_DECRYPT(u.`firstname`, :secretkey) AS firstname_user, 
+                    AES_DECRYPT(u.`lastname`, :secretkey) AS lastname_user, 
+                    AES_DECRYPT(u.`email`, :secretkey) AS email_user, 
+                    AES_DECRYPT(u.`tel`, :secretkey) AS tel_user 
+                FROM `users` u 
+                WHERE 
+                    $where
+            ");
+            $q->bindValue(":secretkey", DB_SECRET, PDO::PARAM_STR);
+            if ($status!="all") {
+                $q->bindValue(":status", $status, PDO::PARAM_INT);
+            }
+            $q->execute();
+            $r = $q->fetchAll();
+            $q = null;
+            return $r;
         }
         return false;
     }

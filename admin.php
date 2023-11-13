@@ -24,7 +24,9 @@ if ( !empty($adminFunctions->redirect) ) {
 $view_file = 'views/'.$view.'.php';
 
 if (file_exists($view_file)) {
+	// echo 'exists';
 	include_once "$view_file";
 }else {
+	// echo '!exists';
 	include_once 'views/a_index.php';
 }

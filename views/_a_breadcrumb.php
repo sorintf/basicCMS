@@ -5,7 +5,7 @@
                     <div class="row align-items-center">
                         <div class="col-md-12">
                             <ul class="breadcrumb mb-3">
-                                <li class="breadcrumb-item"><a href="../navigation/index.html">Home</a></li>
+                                <li class="breadcrumb-item"><a href="<?php echo $adminFunctions->buildUrl(array('view'=>'a_index')); ?>">Dashboard</a></li>
                                 <li class="breadcrumb-item"><a href="javascript: void(0)">Layout</a></li>
                                 <li class="breadcrumb-item" aria-current="page">Vertical Layout</li>
                             </ul>

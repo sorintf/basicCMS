@@ -4,7 +4,7 @@
     <nav class="pc-sidebar">
         <div class="navbar-wrapper">
             <div class="m-header">
-                <a href="#" class="b-brand text-primary">
+                <a href="<?php echo $adminFunctions->buildUrl(array('view'=>'a_index')); ?>" class="b-brand text-primary">
                     <!-- ========   Change your logo from here   ============ -->
                     <img src="/admin_files/assets/images/logo-dark.svg" />
                     <span class="badge bg-light-success rounded-pill ms-2 theme-version"><?php echo $adminFunctions->version; ?></span>
@@ -64,7 +64,7 @@
                         <a href="#!" class="pc-link">
                             <span class="pc-micon">
                                 <svg class="pc-icon">
-                                    <use xlink:href="#custom-status-up"></use>
+                                    <use xlink:href="#custom-user"></use>
                                 </svg>
                             </span>
                             <span class="pc-mtext">Lista</span>
@@ -73,15 +73,24 @@
 
                         <ul class="pc-submenu">
                             <li class="pc-item">
-                                <a class="pc-link" href="../dashboard/index.html">
+                                <a class="pc-link" href="<?php echo $adminFunctions->buildUrl(array('view'=>'a_users_list', 'status'=>'all')); ?>">
                                     <span class="pc-mtext">Toti utilizatorii</span>
                                     <span class="pc-badge"><?php echo $adminFunctions->rep['users']['nr']['total']; ?></span>
                                 </a>
                             </li>
-                            
+
+                            <?php if ($adminFunctions->rep['users']['nr']['approved']>0): ?>
+                                <li class="pc-item">
+                                    <a class="pc-link" href="<?php echo $adminFunctions->buildUrl(array('view'=>'a_users_list', 'status'=>'approved')); ?>">
+                                        <span class="pc-mtext">Aprobat</span>
+                                        <span class="pc-badge"><?php echo $adminFunctions->rep['users']['nr']['approved']; ?></span>
+                                    </a>
+                                </li>
+                            <?php endif ?>
+
                             <?php if ($adminFunctions->rep['users']['nr']['pending_approval']>0): ?>
                                 <li class="pc-item">
-                                    <a class="pc-link" href="../dashboard/analytics.html">
+                                    <a class="pc-link" href="<?php echo $adminFunctions->buildUrl(array('view'=>'a_users_list', 'status'=>'pending_approval')); ?>">
                                         <span class="pc-mtext">De aprobat</span>
                                         <span class="pc-badge"><?php echo $adminFunctions->rep['users']['nr']['pending_approval']; ?></span>
                                     </a>
@@ -90,7 +99,7 @@
 
                             <?php if ($adminFunctions->rep['users']['nr']['pending_confirmation']>0): ?>
                                 <li class="pc-item">
-                                    <a class="pc-link" href="../dashboard/analytics.html">
+                                    <a class="pc-link" href="<?php echo $adminFunctions->buildUrl(array('view'=>'a_users_list', 'status'=>'pending_confirmation')); ?>">
                                         <span class="pc-mtext">De confirmat email</span>
                                         <span class="pc-badge"><?php echo $adminFunctions->rep['users']['nr']['pending_confirmation']; ?></span>
                                     </a>
@@ -99,7 +108,7 @@
 
                             <?php if ($adminFunctions->rep['users']['nr']['pending_deletion']>0): ?>
                                 <li class="pc-item">
-                                    <a class="pc-link" href="../dashboard/analytics.html">
+                                    <a class="pc-link" href="<?php echo $adminFunctions->buildUrl(array('view'=>'a_users_list', 'status'=>'pending_deletion')); ?>">
                                         <span class="pc-mtext">In curs de stergere</span>
                                         <span class="pc-badge"><?php echo $adminFunctions->rep['users']['nr']['pending_deletion']; ?></span>
                                     </a>
@@ -108,7 +117,7 @@
 
                             <?php if ($adminFunctions->rep['users']['nr']['blocked']>0): ?>
                                 <li class="pc-item">
-                                    <a class="pc-link" href="../dashboard/analytics.html">
+                                    <a class="pc-link" href="<?php echo $adminFunctions->buildUrl(array('view'=>'a_users_list', 'status'=>'blocked')); ?>">
                                         <span class="pc-mtext">Blocat</span>
                                         <span class="pc-badge"><?php echo $adminFunctions->rep['users']['nr']['blocked']; ?></span>
                                     </a>

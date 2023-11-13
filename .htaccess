@@ -1,13 +1,13 @@
 #RewriteBase /
 
 <IfModule mod_headers.c>
-  Header set X-XSS-Protection "1; mode=block"
-  Header always append X-Frame-Options SAMEORIGIN
-  Header set X-Content-Type-Options nosniff
-  Header set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" env=HTTPS
+  #Header set X-XSS-Protection "1; mode=block"
+  #Header always append X-Frame-Options SAMEORIGIN
+  #Header set X-Content-Type-Options nosniff
+  #Header set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" env=HTTPS
   #Header set Content-Security-Policy "img-src 'self' https:;"
   #Header set Referrer-Policy "same-origin"
-  Header set Permissions-Policy "accelerometer=none; autoplay=none; camera=none; geolocation=none; interest-cohort=none; microphone=none; payment=none"
+  #Header set Permissions-Policy "accelerometer=none; autoplay=none; camera=none; geolocation=none; interest-cohort=none; microphone=none; payment=none"
   
   <FilesMatch ".(js|css|xml|gz|html)$">
     Header append Vary: Accept-Encoding

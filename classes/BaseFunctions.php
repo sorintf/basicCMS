@@ -60,6 +60,7 @@ class BaseFunctions
     public $imageLoader = false;
     public $slimCrop = false;
     public $pageSel2 = false;
+    public $dataTable = false;
 
     public $page_title = "Two & From - CMS";
     public $page_description = "Atinge întregul potențial al organzației tale";
@@ -2058,7 +2059,10 @@ class BaseFunctions
         switch ($view) {
 
             case 'a_index':
-                $result = "/admin.php";
+                $result = "/admin.php?view=".$view;
+                break;
+            case 'a_users_list':
+                $result = "/admin.php?view=".$view."&status=".$params['status'];
                 break;
 
 

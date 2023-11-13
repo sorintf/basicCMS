@@ -29,6 +29,13 @@
     <!-- [Material Icons] https://fonts.google.com/icons -->
     <link rel="stylesheet" href="/admin_files/assets/fonts/material.css" />
 
+
+    <?php if ($adminFunctions->dataTable): ?>
+        <!-- data tables css -->
+        <link rel="stylesheet" href="/admin_files/assets/css/plugins/dataTables.bootstrap5.min.css">
+    <?php endif ?>
+
+
     <!-- [Template CSS Files] -->
     <link rel="stylesheet" href="/admin_files/assets/css/style.css" id="main-style-link" />
     <link rel="stylesheet" href="/admin_files/assets/css/style-preset.css" />
