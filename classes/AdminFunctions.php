@@ -2,7 +2,7 @@
 class AdminFunctions extends BaseFunctions
 {
 
-    public $version = "a1e";
+    public $version = "a1r";
     public $view = "a_index";
 
     public function __construct(){
@@ -12,12 +12,6 @@ class AdminFunctions extends BaseFunctions
 
 
 
-        $this->rep['users']['nr']['total'] = $this->usersGetNrByStatus("all");
-        $this->rep['users']['nr']['approved'] = $this->usersGetNrByStatus('3');
-        $this->rep['users']['nr']['pending_approval'] = $this->usersGetNrByStatus('2');
-        $this->rep['users']['nr']['pending_confirmation'] = $this->usersGetNrByStatus('1');
-        $this->rep['users']['nr']['blocked'] = $this->usersGetNrByStatus('0');
-        $this->rep['users']['nr']['pending_deletion'] = $this->usersGetNrByStatus('-1');
 
 
 
@@ -119,16 +113,30 @@ class AdminFunctions extends BaseFunctions
 
             $this->page_title = "Two & From - CMS";
             $this->page_description = "Atinge întregul potențial al organzației tale";
+
+
+
+            $this->rep['users']['nr'] = $this->usersGetNrByStatusGrouped(); // only one call to DB
+
+
+            // multiple calls to DB
+            // $this->rep['users']['nr']['total'] = $this->usersGetNrByStatus(array('status'=>"all"));
+            // $this->rep['users']['nr']['approved'] = $this->usersGetNrByStatus(array('status'=>"3"));
+            // $this->rep['users']['nr']['pending_approval'] = $this->usersGetNrByStatus(array('status'=>"2"));
+            // $this->rep['users']['nr']['pending_confirmation'] = $this->usersGetNrByStatus(array('status'=>"1"));
+            // $this->rep['users']['nr']['blocked'] = $this->usersGetNrByStatus(array('status'=>"0"));
+            // $this->rep['users']['nr']['pending_deletion'] = $this->usersGetNrByStatus(array('status'=>"-1"));
         }elseif ($this->view=="a_users_list") {
 
             $this->dataTable = true;
 
+            $args = array();
+
             if (isset($_GET['status'])) {
-                $status = trim(htmlspecialchars($_GET['status']));
+                $this->rep['status'] = $args['status'] = trim(htmlspecialchars($_GET['status']));
             }else{
-                $status = "all";
+                $this->rep['status'] = $args['status'] = "all";
             }
-            $this->rep['users_list'] = $this->usersGetByStatus($status);
         }
     }
 
@@ -139,7 +147,9 @@ class AdminFunctions extends BaseFunctions
 
 
 
-    protected function usersGetNrByStatus( $status="all" ) {
+    protected function usersGetNrByStatus( $params ) {
+        $status = isset($params['status'])?$params['status']:"all";
+
         if ($status=="all") {
             $where = "1";
         }else{
@@ -163,7 +173,27 @@ class AdminFunctions extends BaseFunctions
         }
         return false;
     }
-    protected function usersGetByStatus( $status="all" ) {
+    protected function usersGetNrByStatusGrouped() {
+        if ($this->databaseConnection()) {
+            $q = $this->db_connection->prepare("
+                SELECT 
+                    COUNT(*) AS nr, 
+                    `status`
+                FROM `users` 
+                WHERE 
+                    1
+                GROUP BY `status`
+            ");
+            $q->execute();
+            $r = $q->fetchAll();
+            $q = null;
+            return $r;
+        }
+        return false;
+    }
+    protected function usersGetByStatus( $params ) {
+        $status = isset($params['status'])?$params['status']:"all";
+        $nrOfRowsPerPage = isset($params['nrOfRowsPerPage'])?$params['nrOfRowsPerPage']:10;
         if ($status=="all") {
             $where = "1";
         }else{
@@ -180,8 +210,12 @@ class AdminFunctions extends BaseFunctions
                 FROM `users` u 
                 WHERE 
                     $where
+                ORDER BY 
+                    u.`username` ASC
+                LIMIT 0,:nrOfRowsPerPage
             ");
             $q->bindValue(":secretkey", DB_SECRET, PDO::PARAM_STR);
+            $q->bindValue(":nrOfRowsPerPage", $nrOfRowsPerPage, PDO::PARAM_INT);
             if ($status!="all") {
                 $q->bindValue(":status", $status, PDO::PARAM_INT);
             }

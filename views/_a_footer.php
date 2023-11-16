@@ -24,11 +24,7 @@
         <script src="/admin_files/assets/js/plugins/jquery.dataTables.min.js"></script>
         <script src="/admin_files/assets/js/plugins/dataTables.bootstrap5.min.js"></script>
         <script src="/admin_files/assets/js/plugins/custom.dataTables.js?v=<?php echo $adminFunctions->version; ?>"></script>
-        <script>
-            $('#table-style-hover').DataTable();
-        </script>
     <?php endif ?>
-
 </body>
 <!-- [Body] end -->
 

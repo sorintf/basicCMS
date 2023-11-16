@@ -60,7 +60,7 @@
                     <li class="pc-item pc-caption">
                         <label>Utilizatori</label>
                     </li>
-                    <li class="pc-item pc-hasmenu">
+                    <li class="pc-item pc-hasmenu <?php echo (strpos($adminFunctions->view, "a_users")!==false)?'active pc-trigger':''; ?>">
                         <a href="#!" class="pc-link">
                             <span class="pc-micon">
                                 <svg class="pc-icon">
@@ -72,57 +72,64 @@
                         </a>
 
                         <ul class="pc-submenu">
-                            <li class="pc-item">
+                            <li class="pc-item <?php echo ($adminFunctions->rep['status']==="all")?'active':''; ?>">
                                 <a class="pc-link" href="<?php echo $adminFunctions->buildUrl(array('view'=>'a_users_list', 'status'=>'all')); ?>">
                                     <span class="pc-mtext">Toti utilizatorii</span>
-                                    <span class="pc-badge"><?php echo $adminFunctions->rep['users']['nr']['total']; ?></span>
                                 </a>
                             </li>
 
-                            <?php if ($adminFunctions->rep['users']['nr']['approved']>0): ?>
-                                <li class="pc-item">
-                                    <a class="pc-link" href="<?php echo $adminFunctions->buildUrl(array('view'=>'a_users_list', 'status'=>'approved')); ?>">
-                                        <span class="pc-mtext">Aprobat</span>
-                                        <span class="pc-badge"><?php echo $adminFunctions->rep['users']['nr']['approved']; ?></span>
-                                    </a>
-                                </li>
-                            <?php endif ?>
+                            <li class="pc-item <?php echo ($adminFunctions->rep['status']==="3")?'active':''; ?>">
+                                <a class="pc-link" href="<?php echo $adminFunctions->buildUrl(array('view'=>'a_users_list', 'status'=>'3')); ?>">
+                                    <span class="pc-mtext">Aprobat</span>
+                                </a>
+                            </li>
 
-                            <?php if ($adminFunctions->rep['users']['nr']['pending_approval']>0): ?>
-                                <li class="pc-item">
-                                    <a class="pc-link" href="<?php echo $adminFunctions->buildUrl(array('view'=>'a_users_list', 'status'=>'pending_approval')); ?>">
-                                        <span class="pc-mtext">De aprobat</span>
-                                        <span class="pc-badge"><?php echo $adminFunctions->rep['users']['nr']['pending_approval']; ?></span>
-                                    </a>
-                                </li>
-                            <?php endif ?>
+                            <li class="pc-item <?php echo ($adminFunctions->rep['status']==="2")?'active':''; ?>">
+                                <a class="pc-link" href="<?php echo $adminFunctions->buildUrl(array('view'=>'a_users_list', 'status'=>'2')); ?>">
+                                    <span class="pc-mtext">De aprobat</span>
+                                </a>
+                            </li>
 
-                            <?php if ($adminFunctions->rep['users']['nr']['pending_confirmation']>0): ?>
-                                <li class="pc-item">
-                                    <a class="pc-link" href="<?php echo $adminFunctions->buildUrl(array('view'=>'a_users_list', 'status'=>'pending_confirmation')); ?>">
-                                        <span class="pc-mtext">De confirmat email</span>
-                                        <span class="pc-badge"><?php echo $adminFunctions->rep['users']['nr']['pending_confirmation']; ?></span>
-                                    </a>
-                                </li>
-                            <?php endif ?>
+                            <li class="pc-item <?php echo ($adminFunctions->rep['status']==="1")?'active':''; ?>">
+                                <a class="pc-link" href="<?php echo $adminFunctions->buildUrl(array('view'=>'a_users_list', 'status'=>'1')); ?>">
+                                    <span class="pc-mtext">De confirmat email</span>
+                                </a>
+                            </li>
 
-                            <?php if ($adminFunctions->rep['users']['nr']['pending_deletion']>0): ?>
-                                <li class="pc-item">
-                                    <a class="pc-link" href="<?php echo $adminFunctions->buildUrl(array('view'=>'a_users_list', 'status'=>'pending_deletion')); ?>">
-                                        <span class="pc-mtext">In curs de stergere</span>
-                                        <span class="pc-badge"><?php echo $adminFunctions->rep['users']['nr']['pending_deletion']; ?></span>
-                                    </a>
-                                </li>
-                            <?php endif ?>
+                            <li class="pc-item <?php echo ($adminFunctions->rep['status']==="-1")?'active':''; ?>">
+                                <a class="pc-link" href="<?php echo $adminFunctions->buildUrl(array('view'=>'a_users_list', 'status'=>'-1')); ?>">
+                                    <span class="pc-mtext">In curs de stergere</span>
+                                </a>
+                            </li>
 
-                            <?php if ($adminFunctions->rep['users']['nr']['blocked']>0): ?>
-                                <li class="pc-item">
-                                    <a class="pc-link" href="<?php echo $adminFunctions->buildUrl(array('view'=>'a_users_list', 'status'=>'blocked')); ?>">
-                                        <span class="pc-mtext">Blocat</span>
-                                        <span class="pc-badge"><?php echo $adminFunctions->rep['users']['nr']['blocked']; ?></span>
-                                    </a>
-                                </li>
-                            <?php endif ?>
+                            <li class="pc-item <?php echo ($adminFunctions->rep['status']==="0")?'active':''; ?>">
+                                <a class="pc-link" href="<?php echo $adminFunctions->buildUrl(array('view'=>'a_users_list', 'status'=>'0')); ?>">
+                                    <span class="pc-mtext">Blocat</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="pc-item pc-caption">
+                        <label>FileManager</label>
+                    </li>
+                    <li class="pc-item pc-hasmenu <?php echo (strpos($adminFunctions->view, "a_files")!==false)?'active pc-trigger':''; ?>">
+                        <a href="#!" class="pc-link">
+                            <span class="pc-micon">
+                                <svg class="pc-icon">
+                                    <use xlink:href="#custom-dollar-square"></use>
+                                </svg>
+                            </span>
+                            <span class="pc-mtext">Clienti</span>
+                            <span class="pc-arrow"><i data-feather="chevron-right"></i></span>
+                        </a>
+
+                        <ul class="pc-submenu">
+                            <li class="pc-item <?php echo ($adminFunctions->view==="a_files_clients_list")?'active':''; ?>">
+                                <a class="pc-link" href="<?php echo $adminFunctions->buildUrl(array('view'=>'a_files_clients_list')); ?>">
+                                    <span class="pc-mtext">Lista</span>
+                                </a>
+                            </li>
                         </ul>
                     </li>
 

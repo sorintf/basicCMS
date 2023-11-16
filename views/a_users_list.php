@@ -27,7 +27,7 @@
                         </div>
                         <div class="card-body">
                             <div class="dt-responsive table-responsive">
-                                <table id="table-style-hover" class="table table-striped table-hover table-bordered nowrap">
+                                <table id="list-users" data-status="<?php echo isset($_GET['status'])?trim(htmlspecialchars($_GET['status'])):'all'; ?>" data-totalRows="<?php echo $adminFunctions->rep['users_nr']; ?>" class="table table-striped table-hover table-bordered nowrap">
                                     <thead>
                                         <tr>
                                             <th>Username</th>
@@ -41,21 +41,7 @@
                                             <th>Data creearii</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <?php foreach ($adminFunctions->rep['users_list'] as $key => $value): ?>
-                                            <tr>
-                                                <td><?php echo $value['username']; ?></td>
-                                                <td><?php echo $value['firstname_user']; ?></td>
-                                                <td><?php echo $value['lastname_user']; ?></td>
-                                                <td><?php echo $value['email_user']; ?></td>
-                                                <td><?php echo $value['tel_user']; ?></td>
-                                                <td><?php echo $value['status']; ?></td>
-                                                <td><?php echo $value['admin_status']; ?></td>
-                                                <td><?php echo $value['acc_nl']; ?></td>
-                                                <td><?php echo $value['created_time']; ?></td>
-                                            </tr>
-                                        <?php endforeach ?>
-                                    </tbody>
+                                    
                                     <tfoot>
                                         <tr>
                                             <th>Username</th>
